@@ -1,9 +1,22 @@
-﻿namespace MovieLibrary
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+
+namespace MovieLibrary
 {
     public class Program
     {
         static void Main(String[] args)
         {
+            IServiceCollection serviceCollection = new ServiceCollection();
+            var serviceProvider = serviceCollection
+                .AddLogging(x => x.AddConsole())
+                .BuildServiceProvider();
+
+            var loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger<Program>();
+            logger.Log(LogLevel.Information, "Executing the movie library program");
+            loggerFactory.Dispose();
             String file = "ml-latest-small/movies.csv";
             askForAction(file);
         }
