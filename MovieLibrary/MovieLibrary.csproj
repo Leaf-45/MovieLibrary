@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,10 +9,18 @@
 
   <ItemGroup>
     <None Remove="ml-latest-small\movies.csv" />
+    <None Remove="ml-latest-small\shows.csv" />
+    <None Remove="ml-latest-small\videos.csv" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="ml-latest-small\movies.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ml-latest-small\shows.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ml-latest-small\videos.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

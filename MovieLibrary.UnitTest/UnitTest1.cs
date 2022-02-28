@@ -8,9 +8,9 @@ namespace MovieLibrary.UnitTest
         public void ExceptionCheck_FileNotFoundException_Failure()
         {
             // Arrange
-            MovieLibrary.Program movie = new MovieLibrary.Program();
+            MovieLibrary.Executable movie = new MovieLibrary.Executable();
             // Act and Assert
-            Assert.Throws<System.IO.FileNotFoundException>(() => Program.askForAction(""));
+            Assert.Throws<System.IO.FileNotFoundException>(() => Executable.askForAction(""));
         }
     }
 }
