@@ -1,6 +1,6 @@
 ﻿namespace MovieLibrary
 {
-    internal class Movie : Media
+    public class Movie : Media
     {
         public string[] Genres { get; set;}
 

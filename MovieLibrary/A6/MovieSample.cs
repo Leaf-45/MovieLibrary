@@ -1,6 +1,6 @@
 ﻿namespace MovieLibrary
 {
-    public class MovieSample
+    public class MovieSample : IMovieSample
     {
         public void movieSample() 
         {
