@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieLibrary", "MovieLibrary\MovieLibrary.csproj", "{DF142E4E-2F09-414F-AB78-651FA56016AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieLibrary", "MovieLibrary\MovieLibrary.csproj", "{DF142E4E-2F09-414F-AB78-651FA56016AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieLibrary.UnitTest", "MovieLibrary.UnitTest\MovieLibrary.UnitTest.csproj", "{0AE34610-633E-4371-BE69-026287B39302}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieLibrary.UnitTest", "MovieLibrary.UnitTest\MovieLibrary.UnitTest.csproj", "{0AE34610-633E-4371-BE69-026287B39302}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

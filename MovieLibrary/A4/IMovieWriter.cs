@@ -8,6 +8,6 @@ namespace MovieLibrary
 {
     internal interface IMovieWriter
     {
-        public string addMovies(List<Movie> allMovies);
+        string[] addMovies(String file, List<String[]> allMovies);
     }
 }

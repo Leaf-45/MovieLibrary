@@ -1,28 +1,29 @@
-﻿using Newtonsoft.Json;
-
-namespace MovieLibrary
+﻿namespace MovieLibrary
 {
     public class MovieWriter : IMovieWriter
     {
-        public string addMovies(List<Movie> allMovies)
+        public string[] addMovies(String file, List<String[]> allMovies)
         {
-            Media media = new Movie(getGenre());
-            if (allMovies.Count > 0) 
-            {
-                Movie movie = allMovies[allMovies.Count - 1];
-                media.ID = 1 + movie.ID;
-            }
-            else media.ID = 1;
-            media.title = getMovieName(allMovies); 
-
-            return JsonConvert.SerializeObject(media);
+            String movieLising = validateMovieToAdd(allMovies);
+            int movieID = 1 + Convert.ToInt32(allMovies[allMovies.Count - 1][0]);
+            String movieToAdd = String.Concat(movieID, ",", movieLising);
+            StreamWriter sw = new StreamWriter(file, true);
+            sw.WriteLine(movieToAdd);
+            sw.Close();
+            return movieToAdd.Split(",");
         }
-        private String getMovieName(List<Movie> allMovies)
+        private String validateMovieToAdd(List<String[]> allMovies)
+        {
+            String movieTitle = getMovieName(allMovies);
+            String allGenres = getGenre();
+            return String.Concat(movieTitle, ",", allGenres);
+        }
+
+        private String getMovieName(List<String[]> allMovies)
         {
             Console.WriteLine("Enter the movie title and year for example: Toy Story (1995)");
             String movieTitle = Console.ReadLine();
-            List<Movie> duplicateList = allMovies.Where(m => m.title == movieTitle).ToList();
-            while (duplicateList.Count > 0 || movieTitle == String.Empty)
+            while (allMovies.Exists(x => x[1] == movieTitle) || movieTitle == String.Empty)
             {
                 if (movieTitle == String.Empty)
                 {
@@ -35,13 +36,12 @@ namespace MovieLibrary
                     Console.WriteLine("That movie was already inputted please try another movie");
                     Console.WriteLine("Enter the movie title and year for example: Toy Story (1995)");
                     movieTitle = Console.ReadLine();
-                    duplicateList = allMovies.Where(m => m.title == movieTitle).ToList();
                 }
             }
             return movieTitle;
         }
 
-        private String[] getGenre()
+        private String getGenre()
         {
             List<String> genres = new List<string>();
             String input = "";
@@ -61,7 +61,7 @@ namespace MovieLibrary
                     genres.Add(input);
                 }
             }
-            return genres.ToArray();
+            return String.Join('|', genres);
         }
     }
 }

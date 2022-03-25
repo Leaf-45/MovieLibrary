@@ -2,6 +2,6 @@
 {
     internal interface IMovieReader
     {
-        public void listMovies(List<String> keys);
+        void listMovies(String file);
     }
 }
