@@ -48,7 +48,7 @@ namespace MovieLibrary.A9
             Console.WriteLine("There was a movie found");
             Console.WriteLine($"The ID is {movie[0]}");
             Console.WriteLine($"The title is {movie[1]}");
-            Console.WriteLine($"The genres are is {movie[2]}");
+            Console.WriteLine($"The genres are {movie[2]}");
         }
 
         private void showResult(string[] show)
