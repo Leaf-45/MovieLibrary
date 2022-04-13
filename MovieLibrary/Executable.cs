@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MovieLibrary.A9;
+using MovieLibrary.Context;
 
 namespace MovieLibrary
 {
@@ -16,81 +16,48 @@ namespace MovieLibrary
             var logger = loggerFactory.CreateLogger<Executable>();
             logger.Log(LogLevel.Information, "Executing the movie library program");
             loggerFactory.Dispose();
-            askForAction();
+            AskForAction();
         }
 
-        public static void askForAction()
+        public static void AskForAction()
         {
             String input = "";
-
             IServiceCollection services = new ServiceCollection();
-            services.AddTransient<IMovieReader, MovieReader>();
             services.AddTransient<IMovieWriter, MovieWriter>();
-            services.AddTransient<IMovieSample, MovieSample>();
-            services.AddTransient<IMediaSearch, MediaSearch>();
+            services.AddTransient<IMovieSearch, MovieSearch>();
+            services.AddTransient<IMovieUpdater, MovieUpdater>();
+            services.AddTransient<IMovieDeleter, MovieDeleter>();
             var serviceProvider = services.BuildServiceProvider();
-
-            string movieFile = "ml-latest-small/movies.csv";
-            string showFile = "ml-latest-small/shows.csv";
-            string videoFile = "ml-latest-small/videos.csv";
-
-            if (File.Exists(movieFile))
+            using (var context = new MovieContext()) 
             {
-                List<string[]> movieList = new List<string[]>();
-                StreamReader sr = new StreamReader(movieFile);
-                while (!sr.EndOfStream) movieList.Add(sr.ReadLine().Split(","));
-                sr.Close();
-
                 while (input != "0")
                 {
-                    Console.WriteLine("Press 0 to exit, press 1 to read or write from the movie listing");
-                    Console.WriteLine("press 2 to search from all media types");
-                    Console.WriteLine("Press 3 to display a sample movie, show or video");
-
+                    Console.WriteLine("Press 0 to exit\nPress 1 to search for a movie\nPress 2 to add a movie" +
+                        "\nPress 3 to update a movie\nPress 4 to delete a movie");
                     input = Console.ReadLine();
+
                     if (input == "1")
                     {
-                        Console.WriteLine("Press 1 to list movies, press 2 to write to the list and anything else to return to the main menu");
-                        input = Console.ReadLine();
-                        if (input == "1")
-                        {
-                            var movieReader = serviceProvider.GetService<IMovieReader>();
-                            movieReader.listMovies(movieFile);
-                        }
-                        if (input == "2")
-                        {
-                            var movieWriter = serviceProvider.GetService<IMovieWriter>();
-                            movieList.Add(movieWriter.addMovies(movieFile, movieList));
-                        }
-                        input = "";
+                        var movieSearch = serviceProvider.GetService<IMovieSearch>();
+                        movieSearch.Search(context.Movies.ToList());
                     }
-                    if (input == "2")
-                    {
-                        if (File.Exists(showFile) && File.Exists(videoFile))
-                        {
-                            List<String[]> showList = new List<string[]>();
-                            StreamReader srShow = new StreamReader(showFile);
-                            srShow.ReadLine();
-                            while (!srShow.EndOfStream) showList.Add(srShow.ReadLine().Split(","));
-                            srShow.Close();
-                            List<String[]> videoList = new List<string[]>();
-                            StreamReader srVideo = new StreamReader(videoFile);
-                            srVideo.ReadLine();
-                            while (!srVideo.EndOfStream) videoList.Add(srVideo.ReadLine().Split(","));
-                            srVideo.Close();
-                            var mediaSearch = serviceProvider.GetService<IMediaSearch>();
-                            mediaSearch.mediaSearch(movieList, showList, videoList);
-                        }
-                        else Console.WriteLine("The data for shows and/or movies could not be found\n Returning to main menu");
+                    if (input == "2")          
+                    {     
+                        var movieWriter = serviceProvider.GetService<IMovieWriter>();
+                        movieWriter.AddMovie(context);
                     }
                     if (input == "3")
                     {
-                        var movieSample = serviceProvider.GetService<IMovieSample>();
-                        movieSample.movieSample();
+                        var movieUpdater = serviceProvider.GetService<IMovieUpdater>();
+                        movieUpdater.UpdateMovie(context); 
+                    }
+                    if (input == "4") 
+                    {
+                        var movieDeleter = serviceProvider.GetService<IMovieDeleter>();
+                        movieDeleter.DeleteMovie(context);
                     }
                 }
             }
-            else Console.WriteLine("Could not find movie data\nExiting program");
         }
     }
 }
