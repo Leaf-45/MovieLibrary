@@ -1,22 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MovieLibrary.Context;
+﻿using MovieLibrary.Context;
 using MovieLibrary.DataModels;
 
 namespace MovieLibrary
 {
     public class MovieUtility
     {
+        public Occupation getOccupation(MovieContext context)
+        {
+            foreach (var occupations in context.Occupations) Console.WriteLine(occupations.Name);
+            Console.WriteLine("Select the user's occupation");
+            var occupation = context.Occupations.Where(x => x.Name.ToLower().Contains(Console.ReadLine().ToLower()))
+                .FirstOrDefault();
+            while (true)
+            {
+                if (occupation != null)
+                {
+                    Console.WriteLine($"Did you mean {occupation.Name}?\nPress 1 for yes and anything else to say no");
+                    string input = Console.ReadLine();
+                    if (input != "1")
+                    {
+                        Console.WriteLine("Search for the occupation again");
+                        occupation = context.Occupations.Where(x => x.Name.ToLower().Contains(Console.ReadLine().ToLower()))
+                            .FirstOrDefault();
+                    }
+                    else break;
+                }
+                else
+                {
+                    Console.WriteLine("We did not find the occupation please try again");
+                    occupation = context.Occupations.Where(x => x.Name.ToLower().Contains(Console.ReadLine().ToLower()))
+                        .FirstOrDefault();
+                }
+            }
+            return occupation;
+        }
         public Movie FindSingleMovie(MovieContext context) 
         {
             string response = "";
             Movie movie = null;
             while (response != "1")
             {
-                Console.WriteLine("Enter the name of the movie listing you want");
+                Console.WriteLine("Enter the name of the movie you want");
                 var query = context.Movies.Where(x => x.Title.ToLower().Contains(Console.ReadLine().ToLower()));
                 if (query == null) Console.WriteLine("No movies were found");
                 else
@@ -38,18 +62,33 @@ namespace MovieLibrary
             return movie;
         }
 
+        public int ValidateNumberOfEntriesToDisplay()
+        {
+            Console.WriteLine("Enter the number of entries you would like to see at a time 1-500");
+            string input = Console.ReadLine();
+            int number = 0;
+            while (!int.TryParse(input, out number) || number < 1 || number > 501)
+            {
+                Console.WriteLine("The input was invalid please try again");
+                input = Console.ReadLine();
+            }
+            return number;
+        }
+
         public string SetMovieTitle(MovieContext context)
         {
             Console.WriteLine("Enter the movie's title alongside the year for example: Toy Story (1995)");
             string title = Console.ReadLine();
 
-            var dublicateSearch = context.Movies.Where(x => x.Title == title).FirstOrDefault();
+            var dublicateSearch = context.Movies.Where(x => x.Title == title)
+                .FirstOrDefault();
 
             while (string.IsNullOrEmpty(title) || dublicateSearch != null)
             {
                 Console.WriteLine("The input was invalid or the movie was already in the movie library");
                 title = Console.ReadLine();
-                dublicateSearch = context.Movies.Where(x => x.Title == title).FirstOrDefault();
+                dublicateSearch = context.Movies.Where(x => x.Title == title)
+                    .FirstOrDefault();
             }
             return title;
         }
@@ -91,11 +130,13 @@ namespace MovieLibrary
                 string correctGenre = "";
                 while (query == null || correctGenre != "1")
                 {
-                    query = context.Genres.Where(x => x.Name.ToLower().Contains(Console.ReadLine().ToLower())).FirstOrDefault();
+                    query = context.Genres.Where(x => x.Name.ToLower().Contains(Console.ReadLine().ToLower()))
+                        .FirstOrDefault();
                     if (query == null)
                     {
                         Console.WriteLine("The genre wasn't found please try again");
-                        query = context.Genres.Where(x => x.Name.ToLower().Contains(Console.ReadLine().ToLower())).FirstOrDefault();
+                        query = context.Genres.Where(x => x.Name.ToLower().Contains(Console.ReadLine().ToLower()))
+                            .FirstOrDefault();
                     }
                     else
                     {

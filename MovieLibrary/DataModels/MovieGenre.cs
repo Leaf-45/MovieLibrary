@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MovieLibrary.DataModels
 {
     public class MovieGenre
     {
-    public int Id {get;set;}
-    public virtual Movie Movie { get; set; }
-    public virtual Genre Genre { get; set; }
+        [Key]
+        public int Id {get;set;}
+        [Required]
+        public virtual Movie Movie { get; set; }
+        [Required]
+        public virtual Genre Genre { get; set; }
     }
 }

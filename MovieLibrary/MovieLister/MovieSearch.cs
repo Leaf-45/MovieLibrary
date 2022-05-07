@@ -1,14 +1,15 @@
-﻿using MovieLibrary.DataModels;
+﻿using MovieLibrary.Context;
+using MovieLibrary.DataModels;
 
 namespace MovieLibrary
 {
     internal class MovieSearch : IMovieSearch
     {
-        public void Search(List<Movie> movies) 
+        public void Search(MovieContext movies) 
         {
             Console.WriteLine("Type in the movie you are searching for");
             string response = Console.ReadLine();
-            var query = movies.Where(x => x.Title.ToLower().Contains(response.ToLower()));
+            var query = movies.Movies.Where(x => x.Title.ToLower().Contains(response.ToLower())).ToList();
             int matches = query.Count();
             if (matches != 0)
             {
@@ -19,10 +20,7 @@ namespace MovieLibrary
                     Console.WriteLine($"The movie's ID is: {movie.Id} The movie's title is: {movie.Title} " +
                         $"The movie's release date is: {movie.ReleaseDate}\n");
                     string output = "";
-                    foreach (var genre in movie.MovieGenres) 
-                    {
-                        output += $"{genre.Genre.Name}|";
-                    }
+                    foreach (var genre in movie.MovieGenres)  output += $"{genre.Genre.Name}|";
                     if (output != "") Console.Write($"The genre(s) are: {output.Substring(0, output.Length - 1)}\n");
                     Console.WriteLine("----------------------------------------------------------------------------------------------------------");
                 } 

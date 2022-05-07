@@ -1,9 +1,9 @@
-﻿using MovieLibrary.DataModels;
+﻿using MovieLibrary.Context;
 
 namespace MovieLibrary
 {
     internal interface IMovieSearch
     {
-        void Search(List<Movie> movies);
+        void Search(MovieContext movies);
     }
 }
