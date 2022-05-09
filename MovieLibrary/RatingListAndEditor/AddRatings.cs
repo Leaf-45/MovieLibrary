@@ -37,7 +37,7 @@ namespace MovieLibrary
                 if (user != null)
                 {
                     Console.WriteLine($"Are you looking for the user with the id {user.Id}, the age {user.Age}, " +
-                        $"gender is {user.Gender}, that has the zipcode {user.ZipCode} ,and the occupation {user.Occupation.Name}?\n" +
+                        $"gender is {user.Gender}, that has the zipcode {user.ZipCode}, and the occupation {user.Occupation.Name}?\n" +
                         $"Press 1 for yes and anything else to try again");
                     foundUser = Console.ReadLine();
                     if (foundUser != "1") 
